@@ -12,14 +12,14 @@ defmodule Hangman.Game do
 
   #API FUnctions
   def new_game() do
-
+    %Hangman.Game.State{letters: Dictionary.random_word() |> String.codepoints()}
   end
 
-  def tally(game)do
+  def tally(game) do
 
   end
   
-  def make_move(game, guess)
+  def make_move(game, guess) do
 
   end
 
