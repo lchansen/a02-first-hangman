@@ -5,7 +5,7 @@ defmodule Hangman.Game do
       game_state:   :initializing,  # :won | :lost | :already_used | :good_guess | :bad_guess | :initializing
       turns_left:   7,
       word:         [],      
-      guesses:      ["a", "e", "i", "o", "u"]
+      guesses:      []
     )
   end
 
