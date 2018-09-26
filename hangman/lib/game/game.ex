@@ -19,12 +19,12 @@ defmodule Hangman.Game do
     %{
       game_state: game.game_state,
       turns_left: 7 - length(used),
-      letters:    get_letters(game),
+      letters:    full_word_helper(game.game_state, game.word, get_letters(game)),
       used:       Enum.sort(used),
       last_guess: List.first(game.guesses)
     }
   end
-  
+
   def make_move(game = %Hangman.Game.State{}, guess) do
     updated_game = game
       |> add_guess(guess)
@@ -46,6 +46,9 @@ defmodule Hangman.Game do
     game.guesses 
       |> Enum.filter(&!Enum.member?(game.word, &1))
   end
+
+  def full_word_helper(:lost, full_word, _hidden_letters), do: full_word
+  def full_word_helper(_, _full_word, hidden_letters), do: hidden_letters
 
   #   infer_state(won, turns_left, good_guess?)
   def infer_state(true , _, _), do: :won
@@ -82,7 +85,7 @@ defmodule Hangman.Game do
 
   def update_state(game = %Hangman.Game.State{}) do
     won = won?(game)
-    turns_left = 7 - Enum.count(game.guesses)
+    turns_left = 7 - length(get_used(game))
     good_guess = good_guess?(game)
 
     %Hangman.Game.State{ game |
