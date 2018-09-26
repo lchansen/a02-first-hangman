@@ -34,56 +34,56 @@ defmodule Hangman.Game do
 
   ########## Internal Logic ##########
 
-  def get_letters(game = %Hangman.Game.State{}) do
+  defp get_letters(game = %Hangman.Game.State{}) do
     game.word 
       |> Enum.map(&letter_guard(Enum.member?(game.guesses, &1), &1))
   end
 
-  def letter_guard(true, char), do: char
-  def letter_guard(false, _),   do: "_"
+  defp letter_guard(true, char), do: char
+  defp letter_guard(false, _),   do: "_"
   
-  def get_used(game = %Hangman.Game.State{}) do
+  defp get_used(game = %Hangman.Game.State{}) do
     game.guesses 
       |> Enum.filter(&!Enum.member?(game.word, &1))
   end
 
-  def full_word_helper(:lost, full_word, _hidden_letters), do: full_word
-  def full_word_helper(_, _full_word, hidden_letters), do: hidden_letters
+  defp full_word_helper(:lost, full_word, _hidden_letters), do: full_word
+  defp full_word_helper(_, _full_word, hidden_letters), do: hidden_letters
 
   #   infer_state(won, turns_left, good_guess?)
-  def infer_state(true , _, _), do: :won
-  def infer_state(false, 0, _), do: :lost
-  def infer_state(false, _, true), do: :good_guess
-  def infer_state(false, _, false), do: :bad_guess
+  defp infer_state(true , _, _), do: :won
+  defp infer_state(false, 0, _), do: :lost
+  defp infer_state(false, _, true), do: :good_guess
+  defp infer_state(false, _, false), do: :bad_guess
 
-  def add_guess(game, guess) do
+  defp add_guess(game, guess) do
     dup_guess(Enum.member?(game.guesses, guess), game, guess)
   end
 
-  def dup_guess(true, game, guess) do
+  defp dup_guess(true, game, guess) do
     %Hangman.Game.State{ game |
       game_state: :already_used,
       guesses: move_guess_to_beginning(game.guesses, guess)
     }
   end
 
-  def dup_guess(false, game, guess) do
+  defp dup_guess(false, game, guess) do
     %Hangman.Game.State{ game |
       game_state: :processing,
       guesses: [guess | game.guesses]
     }
   end
 
-  def move_guess_to_beginning(word, guess) do
+  defp move_guess_to_beginning(word, guess) do
     new_word = word |> List.delete(guess)
     [guess | new_word]
   end
 
-  def update_state(game = %Hangman.Game.State{game_state: :already_used}) do
+  defp update_state(game = %Hangman.Game.State{game_state: :already_used}) do
     game
   end
 
-  def update_state(game = %Hangman.Game.State{}) do
+  defp update_state(game = %Hangman.Game.State{}) do
     won = won?(game)
     turns_left = 7 - length(get_used(game))
     good_guess = good_guess?(game)
@@ -93,13 +93,13 @@ defmodule Hangman.Game do
     }
   end
 
-  def won?(game = %Hangman.Game.State{}) do
+  defp won?(game = %Hangman.Game.State{}) do
     get_letters(game)
       |> Enum.member?("_")
       |> Kernel.not
   end
 
-  def good_guess?(game) do
+  defp good_guess?(game) do
     Enum.member?(game.word, List.first(game.guesses))
   end
 end
