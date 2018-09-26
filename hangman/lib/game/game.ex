@@ -9,7 +9,8 @@ defmodule Hangman.Game do
     )
   end
 
-  #API FUnctions
+  ########## API Functions ##########
+  
   def new_game() do
     %Hangman.Game.State{word: Dictionary.random_word() |> String.codepoints()}
   end
@@ -28,7 +29,7 @@ defmodule Hangman.Game do
 
   end
 
-  ##Internal Logic
+  ########## Internal Logic ##########
 
   def get_letters(game) do
     game.word 
