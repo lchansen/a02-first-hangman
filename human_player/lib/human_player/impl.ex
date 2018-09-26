@@ -37,7 +37,7 @@ defmodule HumanPlayer.Impl do
     IO.puts "Ouch! #{inspect guess} is not in the word!\n"
   end
 
-  defp report_move_status(%{ game_state: :already_guessed, last_guess: guess}) do
+  defp report_move_status(%{ game_state: :already_used, last_guess: guess}) do
     IO.puts "You've already guessed #{inspect guess}.\n"
   end
 
