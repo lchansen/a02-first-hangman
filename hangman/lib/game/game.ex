@@ -3,26 +3,50 @@ defmodule Hangman.Game do
   defmodule State do
     defstruct(
       game_state:   :initializing,  # :won | :lost | :already_used | :good_guess | :bad_guess | :initializing
-      turns_left:   7,              # the number of turns left (game starts with 7)
-      letters:      [],             # a list of single character strings
-      used:         [],             # A sorted list of the letters already guessed
-      last_guess:   ""              # the last letter guessed by the player
+      turns_left:   7,
+      word:         [],      
+      guesses:      ["a", "e", "i", "o", "u"]
     )
   end
 
   #API FUnctions
   def new_game() do
-    %Hangman.Game.State{letters: Dictionary.random_word() |> String.codepoints()}
+    %Hangman.Game.State{word: Dictionary.random_word() |> String.codepoints()}
   end
 
   def tally(game) do
-
+    %{
+      game_state: game.game_state,
+      turns_left: game.turns_left,
+      letters:    get_letters(game),
+      used:       get_used(game),
+      last_guess: Enum.at(game.guesses, -1)
+    }
   end
   
-  def make_move(game, guess) do
+  def make_move(_game, _guess) do
 
   end
 
   ##Internal Logic
+
+  def get_letters(game) do
+    game.word 
+    |> Enum.map(&letter_guard(Enum.member?(game.guesses, &1), &1))
+  end
+
+  def letter_guard(true, char), do: char
+  def letter_guard(false, _),   do: "_"
+  
+  def get_used(game) do
+    game.guesses 
+    |> Enum.filter(&!Enum.member?(game.word, &1))
+  end
+
+  def won?(game) do
+    get_letters(game)
+    |> Enum.member?("_")
+    |> Kernel.not
+  end
 
 end
