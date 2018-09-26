@@ -7,7 +7,7 @@ defmodule Hangman.Game do
     #we can derive that from guesses
     defstruct(
       game_state: :initializing,  # :won | :lost | :already_used | :good_guess | :bad_guess | :initializing | 
-                                    #developer added :processing for internal Hangman.Game state only
+                                  # developer added :processing for internal Hangman.Game state only
       word:       [],             # 'secret' word, only set during new_game
       guesses:    []              # holds all user input (goog or bad guess) except for duplicates, in reverse order
     )
